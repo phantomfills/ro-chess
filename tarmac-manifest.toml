@@ -1,4 +1,59 @@
+[inputs."assets/images/pieces/black/bishop.png"]
+hash = "9696076f7ab2008b63f82e01bf303a3edb5163f95c7b1d6e6203bfb5a8be22bd"
+id = 17095582049
+packable = false
+
+[inputs."assets/images/pieces/black/king.png"]
+hash = "819f78b84448264a10b886788aa889acd8fed1744e232fe9d8582f3b822775ce"
+id = 17095582156
+packable = false
+
+[inputs."assets/images/pieces/black/knight.png"]
+hash = "58cfa5dfddbe7d44a4ba66c98cadcc0ad99b19b173dd76fde60fa8009c2e0fbf"
+id = 17095582230
+packable = false
+
+[inputs."assets/images/pieces/black/pawn.png"]
+hash = "16ceed77d64d1a4b3effcd61f2e135c58fa3dee3b5ee31b3b4852a667c90ba57"
+id = 17095582287
+packable = false
+
+[inputs."assets/images/pieces/black/queen.png"]
+hash = "cf2be9c6d5eb649ea54694350ea2c3adbbb4e8bf4663de1bc5c623f6e65d9cc5"
+id = 17095582336
+packable = false
+
+[inputs."assets/images/pieces/black/rook.png"]
+hash = "f2d42326fe1c51bee8ea1e8110bb222f7825360c6d426449e514361c0c3fde09"
+id = 17095582413
+packable = false
+
+[inputs."assets/images/pieces/white/bishop.png"]
+hash = "e757472f3a0c3041006957f9cbe453c64524affb0a159bdb5723b6dc96e6c5a9"
+id = 17095449354
+packable = false
+
+[inputs."assets/images/pieces/white/king.png"]
+hash = "76700e162af98d7d7ff4f97af55004f156839b51887f56253b26c6fd03fcbab4"
+id = 17095507377
+packable = false
+
+[inputs."assets/images/pieces/white/knight.png"]
+hash = "4c4d47a7dc0e57afe2da8ff745e27632b3a0faa5cd4ac77cc8c9a3eae7660e18"
+id = 17095449488
+packable = false
+
 [inputs."assets/images/pieces/white/pawn.png"]
 hash = "9a7360b125dc756c3efbcdc8c2c7ed619d507caca90da47cc0d86c0235afb189"
 id = 17094914377
+packable = false
+
+[inputs."assets/images/pieces/white/queen.png"]
+hash = "f42edbb587b9a1653b98306e120942fc55fd4015c2e6c914a0ab56f5a799d84c"
+id = 17095449588
+packable = false
+
+[inputs."assets/images/pieces/white/rook.png"]
+hash = "ad1054d2a606cff42cb670db70724a94af212e2b03ecd0224ea38545fef45093"
+id = 17095449694
 packable = false

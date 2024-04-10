@@ -2,8 +2,21 @@
 return {
 	images = {
 		pieces = {
+			black = {
+				bishop = "rbxassetid://17095582049",
+				king = "rbxassetid://17095582156",
+				knight = "rbxassetid://17095582230",
+				pawn = "rbxassetid://17095582287",
+				queen = "rbxassetid://17095582336",
+				rook = "rbxassetid://17095582413",
+			},
 			white = {
+				bishop = "rbxassetid://17095449354",
+				king = "rbxassetid://17095507377",
+				knight = "rbxassetid://17095449488",
 				pawn = "rbxassetid://17094914377",
+				queen = "rbxassetid://17095449588",
+				rook = "rbxassetid://17095449694",
 			},
 		},
 	},

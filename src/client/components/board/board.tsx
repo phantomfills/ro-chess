@@ -27,7 +27,7 @@ export function Board() {
 				const cellIcon = getPieceIconFromPieceType(boardCell);
 
 				return (
-					<Cell position={new UDim2(0, column * 50, 0, row * 50)} color={color}>
+					<Cell position={new UDim2(0, column * 50, 0, (7 - row) * 50)} color={color}>
 						{cellIcon !== undefined && <Piece icon={cellIcon} />}
 					</Cell>
 				);
