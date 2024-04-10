@@ -11,7 +11,7 @@ export function Board() {
 			anchorPoint={new Vector2(0.5, 0.5)}
 			backgroundTransparency={1}
 		>
-			{numberRange(0, 64).map((index) => {
+			{numberRange(0, 63).map((index) => {
 				const row = math.floor(index / 8);
 				const column = index % 8;
 
