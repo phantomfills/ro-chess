@@ -1,5 +1,6 @@
 import React from "@rbxts/react";
 import { Frame } from "../ui/frame";
+import { BLACK, WHITE } from "client/constants/board-colors";
 
 interface CellProps {
 	color: "white" | "black";
@@ -11,7 +12,7 @@ export function Cell({ color, position }: CellProps) {
 		<Frame
 			size={new UDim2(0, 50, 0, 50)}
 			position={position}
-			backgroundColor={color === "white" ? Color3.fromRGB(255, 255, 255) : Color3.fromRGB(0, 0, 0)}
+			backgroundColor={color === "white" ? WHITE : BLACK}
 		></Frame>
 	);
 }

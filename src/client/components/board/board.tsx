@@ -17,7 +17,7 @@ export function Board() {
 
 				const color = (row + column) % 2 === 0 ? "white" : "black";
 
-				return <Cell position={new UDim2(column * 0.125, 0, row * 0.125, 0)} color={color} />;
+				return <Cell position={new UDim2(0, column * 50, 0, row * 50)} color={color} />;
 			})}
 		</Frame>
 	);
