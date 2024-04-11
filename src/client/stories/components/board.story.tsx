@@ -1,13 +1,15 @@
 import React from "@rbxts/react";
 import { hoarcekat } from "@rbxts/pretty-react-hooks";
 import { Board } from "client/components/board";
-import { producer } from "client/store/producer";
-import { ReflexProvider } from "@rbxts/react-reflex";
+import { useMockRemotes } from "../utils/use-mock-remotes";
+import { RootProvider } from "client/providers/root-provider";
 
 export = hoarcekat(() => {
+	useMockRemotes();
+
 	return (
-		<ReflexProvider producer={producer}>
+		<RootProvider>
 			<Board />
-		</ReflexProvider>
+		</RootProvider>
 	);
 });

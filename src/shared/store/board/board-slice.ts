@@ -74,4 +74,15 @@ const initialState: BoardState = {
 	],
 };
 
-export const boardSlice = createProducer(initialState, {});
+export const boardSlice = createProducer(initialState, {
+	movePiece: (state, from: number, to: number) => {
+		print("moving piece", from, to);
+
+		const cells = [...state.cells];
+
+		cells[to] = cells[from];
+		cells[from] = undefined;
+
+		return { ...state, cells };
+	},
+});

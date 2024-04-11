@@ -4,4 +4,6 @@ import { Client, createRemotes, remote, Server } from "@rbxts/remo";
 export const remotes = createRemotes({
 	dispatch: remote<Client, [actions: BroadcastAction[]]>(),
 	start: remote<Server, []>(),
+
+	movePiece: remote<Server, [from: number, to: number]>(),
 });

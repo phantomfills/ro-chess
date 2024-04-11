@@ -1,4 +1,4 @@
-import React from "@rbxts/react";
+import React, { useEffect, useState } from "@rbxts/react";
 import { Frame } from "../ui/frame";
 import { Cell } from "./cell";
 import { numberRange } from "shared/utils/math-utils";
@@ -6,9 +6,22 @@ import { useSelector } from "@rbxts/react-reflex";
 import { selectCells } from "shared/store/board/board-selectors";
 import { getPieceIconFromPieceType } from "client/constants/piece-icons";
 import { Piece } from "./piece";
+import { remotes } from "shared/store/remotes";
 
 export function Board() {
 	const cells = useSelector(selectCells);
+
+	const [selectedCell, setSelectedCell] = useState<number | undefined>(undefined);
+	const [previousSelectedCell, setPreviousSelectedCell] = useState<number | undefined>(undefined);
+
+	useEffect(() => {
+		if (previousSelectedCell !== undefined && selectedCell !== undefined) {
+			remotes.movePiece.fire(previousSelectedCell, selectedCell);
+			setSelectedCell(undefined);
+		}
+
+		setPreviousSelectedCell(selectedCell);
+	}, [selectedCell]);
 
 	return (
 		<Frame
@@ -27,7 +40,12 @@ export function Board() {
 				const cellIcon = getPieceIconFromPieceType(boardCell);
 
 				return (
-					<Cell position={new UDim2(0, column * 50, 0, (7 - row) * 50)} color={color}>
+					<Cell
+						position={new UDim2(0, column * 50, 0, (7 - row) * 50)}
+						color={color}
+						selected={selectedCell === index}
+						onClick={() => setSelectedCell(index)}
+					>
 						{cellIcon !== undefined && <Piece icon={cellIcon} />}
 					</Cell>
 				);
