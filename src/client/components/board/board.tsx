@@ -49,7 +49,7 @@ export function Board() {
 						position={new UDim2(0, column * 50, 0, (7 - row) * 50)}
 						color={color}
 						selected={selectedCell === index}
-						onClick={() => setSelectedCell(index)}
+						onClick={() => (selectedCell !== index ? setSelectedCell(index) : setSelectedCell(undefined))}
 					>
 						{cellIcon !== undefined && <Piece icon={cellIcon} />}
 					</Cell>
