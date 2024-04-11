@@ -3,10 +3,11 @@ import { Frame } from "../ui/frame";
 import { Cell } from "./cell";
 import { numberRange } from "shared/utils/math-utils";
 import { useSelector } from "@rbxts/react-reflex";
-import { selectCells } from "shared/store/board/board-selectors";
+import { selectCells, selectPieceAtCell } from "shared/store/board/board-selectors";
 import { getPieceIconFromPieceType } from "client/constants/piece-icons";
 import { Piece } from "./piece";
 import { remotes } from "shared/store/remotes";
+import { producer } from "client/store/producer";
 
 export function Board() {
 	const cells = useSelector(selectCells);
@@ -16,8 +17,12 @@ export function Board() {
 
 	useEffect(() => {
 		if (previousSelectedCell !== undefined && selectedCell !== undefined) {
-			remotes.movePiece.fire(previousSelectedCell, selectedCell);
-			setSelectedCell(undefined);
+			const previousSelectedPiece = producer.getState(selectPieceAtCell(previousSelectedCell));
+
+			if (previousSelectedPiece !== undefined) {
+				remotes.movePiece.fire(previousSelectedCell, selectedCell);
+				setSelectedCell(undefined);
+			}
 		}
 
 		setPreviousSelectedCell(selectedCell);
