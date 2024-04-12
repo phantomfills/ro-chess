@@ -82,9 +82,12 @@ export function selectLegalMovesForCell(cell: number) {
 			case "white-pawn": {
 				const attackingMoves = [cell + 7, cell + 9].filter((move) => {
 					const piece = state.board.cells[move];
-					return piece !== false && getPieceIsBlack(piece);
+					const isLeftEdge = move % 8 === 0;
+					const isRightEdge = move % 8 === 7;
+					const isInvalidLeftAttack = move === cell + 7 && isRightEdge;
+					const isInvalidRightAttack = move === cell + 9 && isLeftEdge;
+					return piece !== false && getPieceIsBlack(piece) && !isInvalidLeftAttack && !isInvalidRightAttack;
 				});
-
 				const oneRowAhead = cell + 8;
 				const twoRowsAhead = cell + 16;
 
@@ -173,6 +176,40 @@ export function selectLegalMovesForCell(cell: number) {
 			}
 			case "white-king": {
 				return getKingMoves(state, cellRow, cellCol).map(({ row, col }) => row * 8 + col);
+			}
+			case "black-pawn": {
+				const attackingMoves = [cell - 7, cell - 9].filter((move) => {
+					const piece = state.board.cells[move];
+					const isLeftEdge = move % 8 === 0;
+					const isRightEdge = move % 8 === 7;
+					const isInvalidLeftAttack = move === cell - 9 && isRightEdge;
+					const isInvalidRightAttack = move === cell - 7 && isLeftEdge;
+					return piece !== false && !getPieceIsBlack(piece) && !isInvalidLeftAttack && !isInvalidRightAttack;
+				});
+				const oneRowBehind = cell - 8;
+				const twoRowsBehind = cell - 16;
+
+				const pieceBlocksOneRowBehind = state.board.cells[oneRowBehind] !== false;
+				const pieceBlocksTwoRowsBehind = state.board.cells[twoRowsBehind] !== false;
+
+				const oneRowBehindIsInBounds = oneRowBehind >= 0;
+				const twoRowsBehindIsInBounds = twoRowsBehind >= 0;
+
+				const oneRowBehindIsAvailable = oneRowBehindIsInBounds && !pieceBlocksOneRowBehind;
+				const twoRowsBehindIsAvailable =
+					twoRowsBehindIsInBounds && !pieceBlocksTwoRowsBehind && !pieceBlocksOneRowBehind;
+
+				const isOnSeventhRow = cell >= 48 && cell < 56;
+
+				const potentialmoves = [
+					...(oneRowBehindIsAvailable ? [oneRowBehind] : []),
+					...(isOnSeventhRow && twoRowsBehindIsAvailable ? [twoRowsBehind] : []),
+					...attackingMoves,
+				];
+
+				const movesInBounds = potentialmoves.filter((move) => move >= 0 && move < 64);
+
+				return movesInBounds;
 			}
 			default: {
 				return [];

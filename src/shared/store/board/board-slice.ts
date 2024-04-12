@@ -83,9 +83,10 @@ export const boardSlice = createProducer(initialState, {
 			return state;
 		}
 
-		const shouldPromote = piece === "white-pawn" && to > 55;
+		const shouldPromoteToWhiteQueen = piece === "white-pawn" && to > 55;
+		const shouldPromoteToBlackQueen = piece === "black-pawn" && to < 8;
 
-		cells[to] = shouldPromote ? "white-queen" : cells[from];
+		cells[to] = shouldPromoteToWhiteQueen ? "white-queen" : shouldPromoteToBlackQueen ? "black-queen" : cells[from];
 		cells[from] = false;
 
 		return { ...state, cells };
