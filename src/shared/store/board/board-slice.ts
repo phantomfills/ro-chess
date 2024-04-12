@@ -2,7 +2,7 @@ import { createProducer } from "@rbxts/reflex";
 import { PieceType } from "shared/constants/piece";
 
 interface BoardState {
-	cells: (PieceType | undefined)[];
+	cells: (PieceType | false)[];
 }
 
 const initialState: BoardState = {
@@ -23,38 +23,38 @@ const initialState: BoardState = {
 		"white-pawn",
 		"white-pawn",
 		"white-pawn",
-		undefined,
-		undefined,
-		undefined,
-		undefined,
-		undefined,
-		undefined,
-		undefined,
-		undefined,
-		undefined,
-		undefined,
-		undefined,
-		undefined,
-		undefined,
-		undefined,
-		undefined,
-		undefined,
-		undefined,
-		undefined,
-		undefined,
-		undefined,
-		undefined,
-		undefined,
-		undefined,
-		undefined,
-		undefined,
-		undefined,
-		undefined,
-		undefined,
-		undefined,
-		undefined,
-		undefined,
-		undefined,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
 		"black-pawn",
 		"black-pawn",
 		"black-pawn",
@@ -79,7 +79,9 @@ export const boardSlice = createProducer(initialState, {
 		const cells = [...state.cells];
 
 		cells[to] = cells[from];
-		cells[from] = undefined;
+		cells[from] = false;
+
+		print(cells);
 
 		return { ...state, cells };
 	},

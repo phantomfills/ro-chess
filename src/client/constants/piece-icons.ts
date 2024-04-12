@@ -20,7 +20,7 @@ export const PIECE_ICONS = {
 	},
 };
 
-export function getPieceIconFromPieceType(pieceType: PieceType | undefined): string | undefined {
+export function getPieceIconFromPieceType(pieceType: PieceType | false): string | undefined {
 	switch (pieceType) {
 		case "white-pawn": {
 			return PIECE_ICONS.WHITE.PAWN;

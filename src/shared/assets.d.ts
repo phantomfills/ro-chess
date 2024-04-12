@@ -17,6 +17,7 @@ interface Images {
 			king: string;
 		};
 	};
+	legal_move_circle: string;
 }
 
 export declare const images: Images;

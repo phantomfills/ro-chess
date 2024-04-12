@@ -3,7 +3,7 @@ import { Frame } from "../ui/frame";
 import { Cell } from "./cell";
 import { numberRange } from "shared/utils/math-utils";
 import { useSelector } from "@rbxts/react-reflex";
-import { selectCells, selectPieceAtCell } from "shared/store/board/board-selectors";
+import { selectCells, selectLegalMovesForCell, selectPieceAtCell } from "shared/store/board/board-selectors";
 import { getPieceIconFromPieceType } from "client/constants/piece-icons";
 import { Piece } from "./piece";
 import { remotes } from "shared/store/remotes";
@@ -14,6 +14,8 @@ export function Board() {
 
 	const [selectedCell, setSelectedCell] = useState<number | undefined>(undefined);
 	const [previousSelectedCell, setPreviousSelectedCell] = useState<number | undefined>(undefined);
+
+	const legalMoves = selectedCell !== undefined ? producer.getState(selectLegalMovesForCell(selectedCell)) : [];
 
 	useEffect(() => {
 		if (previousSelectedCell !== undefined && selectedCell !== undefined) {
@@ -49,6 +51,7 @@ export function Board() {
 						position={new UDim2(0, column * 50, 0, (7 - row) * 50)}
 						color={color}
 						selected={selectedCell === index}
+						legal={legalMoves.includes(index)}
 						onClick={() => (selectedCell !== index ? setSelectedCell(index) : setSelectedCell(undefined))}
 					>
 						{cellIcon !== undefined && <Piece icon={cellIcon} />}

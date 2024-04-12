@@ -1,3 +1,8 @@
+[inputs."assets/images/legal_move_circle.png"]
+hash = "bf3a7f1510c098f6ee8fc9fab68976219df60f62ccec07beea460f78fe0563b7"
+id = 17101701622
+packable = false
+
 [inputs."assets/images/pieces/black/bishop.png"]
 hash = "9696076f7ab2008b63f82e01bf303a3edb5163f95c7b1d6e6203bfb5a8be22bd"
 id = 17095582049
