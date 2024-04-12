@@ -78,10 +78,15 @@ export const boardSlice = createProducer(initialState, {
 	movePiece: (state, from: number, to: number) => {
 		const cells = [...state.cells];
 
-		cells[to] = cells[from];
-		cells[from] = false;
+		const piece = cells[from];
+		if (piece === false) {
+			return state;
+		}
 
-		print(cells);
+		const shouldPromote = piece === "white-pawn" && to > 55;
+
+		cells[to] = shouldPromote ? "white-queen" : cells[from];
+		cells[from] = false;
 
 		return { ...state, cells };
 	},
