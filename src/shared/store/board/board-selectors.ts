@@ -182,7 +182,14 @@ export function selectLegalMovesForCell(cell: number) {
 				].map(({ row, col }) => row * 8 + col);
 			}
 			case "white-king": {
-				return getKingMoves(state, cellRow, cellCol, false).map(({ row, col }) => row * 8 + col);
+				const canCastleLeft = selectCanCastle(state, "white", "left");
+				const canCastleRight = selectCanCastle(state, "white", "right");
+
+				return [
+					...getKingMoves(state, cellRow, cellCol, false).map(({ row, col }) => row * 8 + col),
+					...(canCastleLeft ? [cell - 2] : []),
+					...(canCastleRight ? [cell + 2] : []),
+				];
 			}
 			case "black-pawn": {
 				const attackingMoves = [cell - 7, cell - 9].filter((move) => {
@@ -277,11 +284,39 @@ export function selectLegalMovesForCell(cell: number) {
 				].map(({ row, col }) => row * 8 + col);
 			}
 			case "black-king": {
-				return getKingMoves(state, cellRow, cellCol, true).map(({ row, col }) => row * 8 + col);
+				const canCastleLeft = selectCanCastle(state, "black", "left");
+				const canCastleRight = selectCanCastle(state, "black", "right");
+
+				return [
+					...getKingMoves(state, cellRow, cellCol, true).map(({ row, col }) => row * 8 + col),
+					...(canCastleLeft ? [cell - 2] : []),
+					...(canCastleRight ? [cell + 2] : []),
+				];
 			}
 			default: {
 				return [];
 			}
 		}
 	};
+}
+
+export function selectCanCastle(state: SharedState, color: "white" | "black", side: "left" | "right") {
+	const hasKingMoved = state.board.hasKingMoved[color];
+	const hasRookMoved = state.board.hasRookMoved[color][side];
+
+	if (hasKingMoved || hasRookMoved) {
+		return false;
+	}
+
+	const kingPosition = color === "white" ? 4 : 60;
+	const rookPosition = side === "left" ? (color === "white" ? 0 : 56) : color === "white" ? 7 : 63;
+	const step = rookPosition < kingPosition ? -1 : 1;
+
+	for (let i = kingPosition + step; i !== rookPosition; i += step) {
+		if (state.board.cells[i] !== false) {
+			return false;
+		}
+	}
+
+	return true;
 }
