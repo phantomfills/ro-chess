@@ -365,3 +365,44 @@ export function selectCanCastle(state: SharedState, color: "white" | "black", si
 
 	return true;
 }
+
+export function selectIsCheckPosition(color: "white" | "black") {
+	return (state: SharedState) => {
+		if (color === "white") {
+			// select all possible moves for black pieces. if the white king is in any of those positions, it is in check
+			const blackPieceCells = numberRange(0, 63).filter((cell) => {
+				const piece = state.board.cells[cell];
+				return piece !== false && getPieceIsBlack(piece);
+			});
+
+			const blackPieceMoves = blackPieceCells.map((cell) => selectLegalMovesForCell(cell)(state));
+
+			const blackMoves: number[] = [];
+			blackPieceMoves.forEach((moves) => {
+				moves.forEach((move) => {
+					blackMoves.push(move);
+				});
+			});
+
+			const whiteKingCell = state.board.cells.findIndex((piece) => piece === "white-king");
+			return blackMoves.includes(whiteKingCell);
+		}
+
+		const whitePieceCells = numberRange(0, 63).filter((cell) => {
+			const piece = state.board.cells[cell];
+			return piece !== false && !getPieceIsBlack(piece);
+		});
+
+		const whitePieceMoves = whitePieceCells.map((cell) => selectLegalMovesForCell(cell)(state));
+
+		const whiteMoves: number[] = [];
+		whitePieceMoves.forEach((moves) => {
+			moves.forEach((move) => {
+				whiteMoves.push(move);
+			});
+		});
+
+		const blackKingCell = state.board.cells.findIndex((piece) => piece === "black-king");
+		return whiteMoves.includes(blackKingCell);
+	};
+}
