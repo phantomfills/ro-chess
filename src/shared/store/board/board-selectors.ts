@@ -110,10 +110,32 @@ export function selectLegalMovesForCell(cell: number) {
 
 				const isOnSecondRow = cell >= 8 && cell < 16;
 
+				const enPassantLeft = cell - 1;
+				const enPassantRight = cell + 1;
+
+				const enPassantLeftPiece = state.board.cells[enPassantLeft];
+				const enPassantRightPiece = state.board.cells[enPassantRight];
+
+				const enPassantLeftMovedTwoRows = state.board.prevCells[enPassantLeft] === false;
+				const enPassantRightMovedTwoRows = state.board.prevCells[enPassantRight] === false;
+
+				const enPassantLeftIsBlackPawn = enPassantLeftPiece === "black-pawn";
+				const enPassantRightIsBlackPawn = enPassantRightPiece === "black-pawn";
+
+				const enPassantLeftIsOnFifthRow = enPassantLeft >= 32 && enPassantLeft < 40;
+				const enPassantRightIsOnFifthRow = enPassantRight >= 32 && enPassantRight < 40;
+
+				const enPassantLeftIsAvailable =
+					enPassantLeftIsBlackPawn && enPassantLeftIsOnFifthRow && enPassantLeftMovedTwoRows;
+				const enPassantRightIsAvailable =
+					enPassantRightIsBlackPawn && enPassantRightIsOnFifthRow && enPassantRightMovedTwoRows;
+
 				const potentialmoves = [
 					...(oneRowAheadIsAvailable ? [oneRowAhead] : []),
 					...(isOnSecondRow && twoRowsAheadIsAvailable ? [twoRowsAhead] : []),
 					...attackingMoves,
+					...(enPassantLeftIsAvailable ? [enPassantLeft + 8] : []),
+					...(enPassantRightIsAvailable ? [enPassantRight + 8] : []),
 				];
 
 				const movesInBounds = potentialmoves.filter((move) => move >= 0 && move < 64);
@@ -215,10 +237,33 @@ export function selectLegalMovesForCell(cell: number) {
 
 				const isOnSeventhRow = cell >= 48 && cell < 56;
 
+				// add en passant
+				const enPassantLeft = cell - 1;
+				const enPassantRight = cell + 1;
+
+				const enPassantLeftPiece = state.board.cells[enPassantLeft];
+				const enPassantRightPiece = state.board.cells[enPassantRight];
+
+				const enPassantLeftMovedTwoRows = state.board.prevCells[enPassantLeft] === false;
+				const enPassantRightMovedTwoRows = state.board.prevCells[enPassantRight] === false;
+
+				const enPassantLeftIsWhitePawn = enPassantLeftPiece === "white-pawn";
+				const enPassantRightIsWhitePawn = enPassantRightPiece === "white-pawn";
+
+				const enPassantLeftIsOnFourthRow = enPassantLeft >= 24 && enPassantLeft < 32;
+				const enPassantRightIsOnFourthRow = enPassantRight >= 24 && enPassantRight < 32;
+
+				const enPassantLeftIsAvailable =
+					enPassantLeftIsWhitePawn && enPassantLeftIsOnFourthRow && enPassantLeftMovedTwoRows;
+				const enPassantRightIsAvailable =
+					enPassantRightIsWhitePawn && enPassantRightIsOnFourthRow && enPassantRightMovedTwoRows;
+
 				const potentialmoves = [
 					...(oneRowBehindIsAvailable ? [oneRowBehind] : []),
 					...(isOnSeventhRow && twoRowsBehindIsAvailable ? [twoRowsBehind] : []),
 					...attackingMoves,
+					...(enPassantLeftIsAvailable ? [enPassantLeft - 8] : []),
+					...(enPassantRightIsAvailable ? [enPassantRight - 8] : []),
 				];
 
 				const movesInBounds = potentialmoves.filter((move) => move >= 0 && move < 64);

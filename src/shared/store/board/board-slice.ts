@@ -3,6 +3,7 @@ import { PieceType } from "shared/constants/piece";
 
 interface BoardState {
 	cells: (PieceType | false)[];
+	prevCells: (PieceType | false)[];
 	hasKingMoved: {
 		white: boolean;
 		black: boolean;
@@ -86,6 +87,7 @@ const initialState: BoardState = {
 		"black-knight",
 		"black-rook",
 	],
+	prevCells: [],
 	hasKingMoved: {
 		white: false,
 		black: false,
@@ -104,9 +106,10 @@ const initialState: BoardState = {
 
 export const boardSlice = createProducer(initialState, {
 	movePiece: (state, from: number, to: number) => {
-		let hasKingMoved = state.hasKingMoved;
+		const hasKingMoved = state.hasKingMoved;
 		const hasRookMoved = state.hasRookMoved;
 
+		const prevCells = [...state.cells];
 		const cells = [...state.cells];
 
 		const piece = cells[from];
@@ -115,9 +118,9 @@ export const boardSlice = createProducer(initialState, {
 		}
 
 		if (piece === "white-king" && !hasKingMoved.white) {
-			hasKingMoved = { ...hasKingMoved, white: true };
+			hasKingMoved.white = true;
 		} else if (piece === "black-king" && !hasKingMoved.black) {
-			hasKingMoved = { ...hasKingMoved, black: true };
+			hasKingMoved.black = true;
 		}
 
 		if (piece === "white-rook" && from === 0 && !state.hasRookMoved.white.left) {
@@ -150,6 +153,51 @@ export const boardSlice = createProducer(initialState, {
 			cells[59] = "black-rook";
 		}
 
-		return { cells, hasKingMoved, hasRookMoved };
+		const enPassantLeft = from - 1;
+		const enPassantRight = from + 1;
+
+		const enPassantLeftPiece = state.cells[enPassantLeft];
+		const enPassantRightPiece = state.cells[enPassantRight];
+
+		const enPassantLeftMovedTwoRows = state.prevCells[enPassantLeft] === false;
+		const enPassantRightMovedTwoRows = state.prevCells[enPassantRight] === false;
+
+		if (piece === "white-pawn") {
+			const enPassantLeftIsBlackPawn = enPassantLeftPiece === "black-pawn";
+			const enPassantRightIsBlackPawn = enPassantRightPiece === "black-pawn";
+
+			const enPassantLeftIsOnFifthRow = enPassantLeft >= 32 && enPassantLeft < 40;
+			const enPassantRightIsOnFifthRow = enPassantRight >= 32 && enPassantRight < 40;
+
+			const enPassantLeftIsAvailable =
+				enPassantLeftIsBlackPawn && enPassantLeftIsOnFifthRow && enPassantLeftMovedTwoRows;
+			const enPassantRightIsAvailable =
+				enPassantRightIsBlackPawn && enPassantRightIsOnFifthRow && enPassantRightMovedTwoRows;
+
+			if (enPassantLeftIsAvailable && to === enPassantLeft + 8) {
+				cells[enPassantLeft] = false;
+			} else if (enPassantRightIsAvailable && to === enPassantRight + 8) {
+				cells[enPassantRight] = false;
+			}
+		} else if (piece === "black-pawn") {
+			const enPassantLeftIsWhitePawn = enPassantLeftPiece === "white-pawn";
+			const enPassantRightIsWhitePawn = enPassantRightPiece === "white-pawn";
+
+			const enPassantLeftIsOnFourthRow = enPassantLeft >= 24 && enPassantLeft < 32;
+			const enPassantRightIsOnFourthRow = enPassantRight >= 24 && enPassantRight < 32;
+
+			const enPassantLeftIsAvailable =
+				enPassantLeftIsWhitePawn && enPassantLeftIsOnFourthRow && enPassantLeftMovedTwoRows;
+			const enPassantRightIsAvailable =
+				enPassantRightIsWhitePawn && enPassantRightIsOnFourthRow && enPassantRightMovedTwoRows;
+
+			if (enPassantLeftIsAvailable && to === enPassantLeft - 8) {
+				cells[enPassantLeft] = false;
+			} else if (enPassantRightIsAvailable && to === enPassantRight - 8) {
+				cells[enPassantRight] = false;
+			}
+		}
+
+		return { cells, prevCells, hasKingMoved, hasRookMoved };
 	},
 });
