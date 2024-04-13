@@ -136,7 +136,6 @@ export const boardSlice = createProducer(initialState, {
 		cells[to] = shouldPromoteToWhiteQueen ? "white-queen" : shouldPromoteToBlackQueen ? "black-queen" : cells[from];
 		cells[from] = false;
 
-		// if the king has moved more than one square, it's a castle
 		if (piece === "white-king" && to - from === 2) {
 			cells[7] = false;
 			cells[5] = "white-rook";
