@@ -345,7 +345,29 @@ export function selectLegalMovesForCell(cell: number) {
 	};
 }
 
-export function selectCanCastle(state: SharedState, color: "white" | "black", side: "left" | "right") {
+export function selectLegalMovesWithoutCheckForCell(cell: number) {
+	return (state: SharedState) => {
+		const legalMoves = selectLegalMovesForCell(cell)(state);
+
+		return legalMoves.filter((move) => {
+			const nextState = state.board.cells.map((cell) => cell);
+			nextState[move] = nextState[cell];
+			nextState[cell] = false;
+
+			const piece = state.board.cells[cell];
+			if (piece === false) return false;
+
+			const isCheck = selectIsCheckPosition(getPieceIsBlack(piece) ? "black" : "white")({
+				...state,
+				board: { ...state.board, cells: nextState },
+			});
+
+			return !isCheck;
+		});
+	};
+}
+
+function selectCanCastle(state: SharedState, color: "white" | "black", side: "left" | "right") {
 	const hasKingMoved = state.board.hasKingMoved[color];
 	const hasRookMoved = state.board.hasRookMoved[color][side];
 
@@ -369,7 +391,6 @@ export function selectCanCastle(state: SharedState, color: "white" | "black", si
 export function selectIsCheckPosition(color: "white" | "black") {
 	return (state: SharedState) => {
 		if (color === "white") {
-			// select all possible moves for black pieces. if the white king is in any of those positions, it is in check
 			const blackPieceCells = numberRange(0, 63).filter((cell) => {
 				const piece = state.board.cells[cell];
 				return piece !== false && getPieceIsBlack(piece);

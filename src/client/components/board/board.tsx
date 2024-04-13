@@ -6,7 +6,7 @@ import { useSelector } from "@rbxts/react-reflex";
 import {
 	selectCells,
 	selectIsCheckPosition,
-	selectLegalMovesForCell,
+	selectLegalMovesWithoutCheckForCell,
 	selectPieceAtCell,
 } from "shared/store/board/board-selectors";
 import { getPieceIconFromPieceType } from "client/constants/piece-icons";
@@ -42,7 +42,8 @@ export function Board() {
 	const [selectedCell, setSelectedCell] = useState<number | undefined>(undefined);
 	const [previousSelectedCell, setPreviousSelectedCell] = useState<number | undefined>(undefined);
 
-	const legalMoves = selectedCell !== undefined ? producer.getState(selectLegalMovesForCell(selectedCell)) : [];
+	const legalMoves =
+		selectedCell !== undefined ? producer.getState(selectLegalMovesWithoutCheckForCell(selectedCell)) : [];
 
 	useEffect(() => {
 		if (previousSelectedCell !== undefined && selectedCell !== undefined) {
